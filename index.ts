@@ -106,12 +106,14 @@ export async function mint(network: string) {
           ).toFixed(0)} minutes at ${convertTimestamp(Date.now() + interval)}`
         );
         await new Promise((resolve) => setTimeout(resolve, interval));
+
         try {
           const claimTx = await toMint(wallet, signer, nft, claimContract);
 
           if (!claimTx) throw Error;
 
           await claimTx.wait();
+
           nftsMinted.push(nft.name);
 
           console.log(
@@ -148,7 +150,7 @@ export async function mint(network: string) {
   const db = await connect();
   const { wallets } = db;
 
-  let interval;
+  let interval = 0;
 
   wallets.forEach(async (wallet, i) => {
     const provider = createProxyProvider(wallet.proxy, providers[network]);
@@ -163,6 +165,7 @@ export async function mint(network: string) {
         interval / 60000
       ).toFixed(0)} minutes at ${convertTimestamp(Date.now() + interval)}`
     );
+
     await new Promise((resolve) => setTimeout(resolve, interval));
     await mintAll(wallet, signer);
   });
