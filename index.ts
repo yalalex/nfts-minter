@@ -170,3 +170,7 @@ export async function mint(network: string) {
     await mintAll(wallet, signer);
   });
 }
+
+const [_, __, network] = process.argv;
+
+mint(network);
